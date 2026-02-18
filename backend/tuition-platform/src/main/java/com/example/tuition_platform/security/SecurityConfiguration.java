@@ -33,11 +33,15 @@ public class SecurityConfiguration {
         http.csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/").permitAll()
-                        .requestMatchers("/auth/**","/v3/api-docs/**",
-                                "/swagger-ui/**",
-                                "/swagger-ui.html").permitAll()
-                        .requestMatchers("/users/**").permitAll()
+                        .requestMatchers(
+                                "/",
+                                "/auth/**",
+                                "/users/**",
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",      // This covers the internal CSS/JS files
+                                "/swagger-ui.html",    // This is the main entry point
+                                "/swagger-config"      // Sometimes required by SpringDoc
+                        ).permitAll()
                         .requestMatchers("/tutees/**").authenticated()
                         .requestMatchers("/tutors/**").authenticated()
                         .anyRequest().authenticated())
