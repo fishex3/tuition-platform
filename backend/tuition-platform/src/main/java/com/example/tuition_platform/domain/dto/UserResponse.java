@@ -1,0 +1,14 @@
+package com.example.tuition_platform.domain.dto;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+public record UserResponse(
+        UUID id,
+        String username,
+        String email,
+        LocalDateTime createdAt,
+        boolean isTutor,
+        boolean isTutee
+) {
+}

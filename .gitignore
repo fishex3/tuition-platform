@@ -1,0 +1,34 @@
+# --- OS Files ---
+.DS_Store
+Thumbs.db
+
+# --- Backend (Spring Boot / Java) ---
+backend/target/
+backend/.mvn/
+backend/*.jar
+backend/*.war
+backend/*.zip
+backend/*.tar.gz
+
+# --- IDEs (IntelliJ, VS Code, Eclipse) ---
+.idea/
+*.iml
+.vscode/
+.project
+.classpath
+.settings/
+
+# --- Frontend (React / Node) ---
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+frontend/.env.local
+frontend/.env.development.local
+frontend/.env.test.local
+frontend/.env.production.local
+frontend/npm-debug.log*
+frontend/yarn-debug.log*
+frontend/yarn-error.log*
+
+# --- Infrastructure ---
+.env
