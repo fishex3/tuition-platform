@@ -1,0 +1,24 @@
+services:
+  postgres-db:
+    image: postgres:16-alpine
+    container_name: tuition-platform-db
+    restart: always
+    environment:
+      # These should match your Spring Boot application.properties
+      - POSTGRES_USER=tuition_admin
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_DB=tuition_db
+    ports:
+      - "5433:5432"
+    volumes:
+      # Persistent Volume: Maps a named volume to the Postgres data directory
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tuition_admin -d tuition_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  # This named volume is what saves your data when the container stops
+  pgdata:
