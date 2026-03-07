@@ -1,33 +1,48 @@
 package com.example.tuition_platform.controller;
 
+import com.example.tuition_platform.service.PostingService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.Map;
+import java.util.List;
+import com.example.tuition_platform.domain.entity.TutorPosting;
 
 @RestController
 @RequestMapping("/api/posts")
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = { "http://localhost:3000", "http://localhost:3001" })
 public class PostingController {
 
-    // 1. Endpoint for creating a TUTOR listing
-    @PostMapping("/tutor")
-    public ResponseEntity<String> createTutorListing(@RequestBody Map<String, Object> listingData) {
-        // Right now, this just accepts the JSON from the frontend and prints it to your
-        // terminal
-        System.out.println("Received new Tutor Listing: " + listingData);
+    private final PostingService postingService;
 
-        // Later, we will connect this to the database. For now, we return a success
-        // message!
-        return ResponseEntity.ok("Tutor listing endpoint hit successfully! Data received.");
+    // This connects your controller to your new service
+    public PostingController(PostingService postingService) {
+        this.postingService = postingService;
     }
 
-    // 2. Endpoint for creating a TUTEE listing
+    @PostMapping("/tutor")
+    public ResponseEntity<String> createTutorListing(@RequestBody Map<String, Object> listingData) {
+        System.out.println("Saving Tutor Listing to Database: " + listingData);
+
+        // Hands the data to the service to be saved
+        postingService.createTutorPosting(listingData);
+
+        return ResponseEntity.ok("Tutor listing saved to database successfully!");
+    }
+
     @PostMapping("/tutee")
     public ResponseEntity<String> createTuteeListing(@RequestBody Map<String, Object> listingData) {
+        System.out.println("Saving Tutee Listing to Database: " + listingData);
 
-        System.out.println("Received new Tutee Listing: " + listingData);
+        postingService.createTuteePosting(listingData);
 
-        return ResponseEntity.ok("Tutee listing endpoint hit successfully! Data received.");
+        return ResponseEntity.ok("Tutee listing saved to database successfully!");
+    }
+
+    // optional endpoint for fetching all tutor postings
+    @GetMapping("/tutor")
+    public ResponseEntity<List<TutorPosting>> getAllTutorListings() {
+        System.out.println("Fetching all tutor listings from the database...");
+        List<TutorPosting> allPostings = postingService.getAllTutorPostings();
+        return ResponseEntity.ok(allPostings);
     }
 }
