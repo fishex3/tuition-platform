@@ -2,10 +2,12 @@ package com.example.tuition_platform.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/posts")
+@CrossOrigin(origins = "http://localhost:3000")
 public class PostingController {
 
     // 1. Endpoint for creating a TUTOR listing
