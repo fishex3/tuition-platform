@@ -1,8 +1,12 @@
 package com.example.tuition_platform.controller;
 
+import com.example.tuition_platform.domain.entity.TutorPosting;
+import com.example.tuition_platform.domain.entity.TuteePosting;
+import com.example.tuition_platform.service.PostingService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.CrossOrigin;
+
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -10,24 +14,33 @@ import java.util.Map;
 @CrossOrigin(origins = "http://localhost:3000")
 public class PostingController {
 
-    // 1. Endpoint for creating a TUTOR listing
-    @PostMapping("/tutor")
-    public ResponseEntity<String> createTutorListing(@RequestBody Map<String, Object> listingData) {
-        // Right now, this just accepts the JSON from the frontend and prints it to your
-        // terminal
-        System.out.println("Received new Tutor Listing: " + listingData);
+    private final PostingService postingService;
 
-        // Later, we will connect this to the database. For now, we return a success
-        // message!
-        return ResponseEntity.ok("Tutor listing endpoint hit successfully! Data received.");
+    public PostingController(PostingService postingService) {
+        this.postingService = postingService;
     }
 
-    // 2. Endpoint for creating a TUTEE listing
+    @PostMapping("/tutor")
+    public ResponseEntity<String> createTutorListing(@RequestBody Map<String, Object> listingData) {
+        postingService.createTutorPosting(listingData);
+        return ResponseEntity.ok("Tutor listing saved to database successfully!");
+    }
+
     @PostMapping("/tutee")
     public ResponseEntity<String> createTuteeListing(@RequestBody Map<String, Object> listingData) {
+        postingService.createTuteePosting(listingData);
+        return ResponseEntity.ok("Tutee listing saved to database successfully!");
+    }
 
-        System.out.println("Received new Tutee Listing: " + listingData);
+    @GetMapping("/tutor")
+    public ResponseEntity<List<TutorPosting>> getAllTutorListings() {
+        List<TutorPosting> allPostings = postingService.getAllTutorPostings();
+        return ResponseEntity.ok(allPostings);
+    }
 
-        return ResponseEntity.ok("Tutee listing endpoint hit successfully! Data received.");
+    @GetMapping("/tutee")
+    public ResponseEntity<List<TuteePosting>> getAllTuteeListings() {
+        List<TuteePosting> allPostings = postingService.getAllTuteePostings();
+        return ResponseEntity.ok(allPostings);
     }
 }
